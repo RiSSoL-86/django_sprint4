@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% block title %}
+  {% if '/edit/' in request.path %}
+    Редактирование публикации
+  {% elif "/delete/" in request.path %}
+    Удаление публикации
+  {% else %}
+    Добавление публикации
+  {% endif %}
+{% endblock %}
+{% block content %}
+  <div class="col d-flex justify-content-center">
+    <div class="card" style="width: 40rem;">
+      <div class="card-header">
+        {% if '/edit/' in request.path %}
+          Редактирование публикации
+        {% elif '/delete/' in request.path %}
+          Удаление публикации
+        {% else %}
+          Добавление публикации
+        {% endif %}
+      </div>
+      <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          {% if not '/delete/' in request.path %}
+            {% bootstrap_form form %}
+          {% else %}
+            <article>
+              {% if form.instance.image %}
+                <a href="{{ form.instance.image.url }}" target="_blank">
+                  <img class="border-3 rounded img-fluid img-thumbnail mb-2" src="{{ form.instance.image.url }}">
+                </a>
+              {% endif %}
+              <p>{{ form.instance.pub_date|date:"d E Y" }} | {% if form.instance.location and form.location.is_published %}{{ form.instance.location.name }}{% else %}Планета Земля{% endif %}<br>
+              <h3>{{ form.instance.title }}</h3>
+              <p>{{ form.instance.text|linebreaksbr }}</p>
+            </article>
+          {% endif %}
+          {% bootstrap_button button_type="submit" content="Отправить" %}
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

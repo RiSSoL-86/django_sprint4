@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}Ошибка CSRF токена{% endblock %}
+{% block content %}
+  <h1>Ошибка CSRF токена. 403</h1>
+  <a href="{% url 'blog:index' %}">Вернуться на главную</a>
+{% endblock %}
