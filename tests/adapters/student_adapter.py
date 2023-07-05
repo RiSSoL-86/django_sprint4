@@ -8,7 +8,6 @@ from conftest import get_field_key
 
 
 class StudentModelAdapter(ModelAdapter):
-
     def __init__(self, item_or_class: Union[Model, Type[Model]]):
         super().__init__(item_or_class=item_or_class)
 
@@ -28,14 +27,14 @@ class StudentModelAdapter(ModelAdapter):
         ...
 
     def __getattr__(self, name: str) -> Any:
-        if name.startswith('_') or name in self._access_by_name_fields:
+        if name.startswith("_") or name in self._access_by_name_fields:
             return getattr(self._item_or_cls, name)
 
         item_fields = [
             (f.name, type(f), getattr(self.ItemModel, f.name).field)
             for f in self.ItemModel._meta.concrete_fields
-            if issubclass(type(f), Field) and (
-                    f.name not in self._access_by_name_fields)
+            if issubclass(type(f), Field)
+            and (f.name not in self._access_by_name_fields)
         ]
 
         item_field_names = {
@@ -44,27 +43,27 @@ class StudentModelAdapter(ModelAdapter):
         }
 
         assert len(item_field_names) == len(item_fields), (
-            f'Убедитесь, что в модели {self.ItemModel.__name__} нет полей, '
-            'которые не описаны в задании. '
-            'Проверьте, что для всех полей модели правильно заданы типы.'
+            f"Убедитесь, что в модели {self.ItemModel.__name__} нет полей,"
+            " которые не описаны в задании. Проверьте, что для всех полей"
+            " модели правильно заданы типы."
         )
 
         adapter_field_key = get_field_key(
             type(getattr(self.AdapterFields, name)),
-            getattr(self.AdapterFields, name))
+            getattr(self.AdapterFields, name),
+        )
         try:
-            item_field_name = (
-                item_field_names[adapter_field_key])
+            item_field_name = item_field_names[adapter_field_key]
         except KeyError:
             raise AssertionError(
-                f'В модели `{self.ItemModel.__name__}` '
-                f'создайте поле типа `{adapter_field_key[0]}`, которое '
-                f'{self.AdapterFields.field_description[name]}.'
+                f"В модели `{self.ItemModel.__name__}` создайте поле типа"
+                f" `{adapter_field_key[0]}`, которое"
+                f" {self.AdapterFields.field_description[name]}."
             )
         return getattr(self._item_or_cls, item_field_name)
 
     def __setattr__(self, key, value):
-        if key.startswith('_'):
+        if key.startswith("_"):
             self.__dict__[key] = value
             return
         student_key = self.get_student_field_name(key)

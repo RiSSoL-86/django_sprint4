@@ -24,17 +24,25 @@ class PostModelAdapter(StudentModelAdapter):
     @property
     def _access_by_name_fields(self):
         return [
-            'id', 'created_at', 'is_published', 'title', 'text',
-            'pub_date', 'author', 'category', 'location', 'refresh_from_db']
+            "id",
+            "created_at",
+            "is_published",
+            "title",
+            "text",
+            "pub_date",
+            "author",
+            "category",
+            "location",
+            "refresh_from_db",
+        ]
 
     @property
     def AdapterFields(self) -> type:
-
         class _AdapterFields:
             image = models.ImageField()
 
             field_description = {
-                'image': 'служит для хранения изображения публикации',
+                "image": "служит для хранения изображения публикации",
             }
 
         return _AdapterFields
@@ -42,6 +50,7 @@ class PostModelAdapter(StudentModelAdapter):
     @property
     def ItemModel(self) -> Type[Model]:
         from blog.models import Post
+
         return Post
 
     @property
@@ -49,6 +58,6 @@ class PostModelAdapter(StudentModelAdapter):
         """Gets the field name (if `self` is class adapter) or its value
         (if `self` is item adapter) that is displayed on a page"""
         if isclass(self._item_or_cls):
-            return 'title'
+            return "title"
         else:
-            return self.title.replace('\n', '')
+            return self.title.replace("\n", "")
