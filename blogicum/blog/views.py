@@ -68,7 +68,7 @@ def post_detail(request, post_id):
 @login_required
 def create_post(request):
     """Создание поста"""
-    form = PostForm(request.POST or None)
+    form = PostForm(request.POST or None, files=request.FILES or None)
     context = {'form': form}
     if form.is_valid():
         post = form.save(commit=False)
