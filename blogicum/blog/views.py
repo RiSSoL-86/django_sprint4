@@ -15,9 +15,8 @@ def posts(**kwargs):
         'category',
         'location',
         'author'
-        ).annotate(comment_count=Count('comments')
-                   ).filter(**kwargs
-                            ).order_by('-pub_date')
+    ).annotate(comment_count=Count('comments')
+               ).filter(**kwargs).order_by('-pub_date')
 
 
 def paginator(request, **kwargs):
@@ -58,8 +57,7 @@ def post_detail(request, post_id):
     comments = Comment.objects.select_related(
         'author',
         'post'
-        ).filter(post_id=post_id
-                 ).order_by('created_at')
+    ).filter(post_id=post_id).order_by('created_at')
     form = CommentForm(request.POST or None)
     context = {'post': post,
                'comments': comments,
