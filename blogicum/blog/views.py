@@ -74,7 +74,7 @@ def create_post(request):
         post = form.save(commit=False)
         post.author = request.user
         post.save()
-        return redirect('blog:index')
+        return redirect('blog:profile', request.user)
     return render(request, 'blog/create.html', context)
 
 
