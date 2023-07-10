@@ -76,7 +76,7 @@ def create_post(request):
     """Создание публикации"""
     form = PostForm(request.POST or None, files=request.FILES or None)
     context = {'form': form}
-    if form.is_valid():
+    if form.is_valid() and request.method == 'POST':
         post = form.save(commit=False)
         post.author = request.user
         post.save()
@@ -92,7 +92,7 @@ def edit_post(request, post_id):
         return redirect('blog:post_detail', post_id)
     form = PostForm(request.POST or None, instance=post)
     context = {'form': form}
-    if form.is_valid():
+    if form.is_valid() and request.method == 'POST':
         form.save()
         return redirect('blog:post_detail', post_id)
     return render(request, 'blog/create.html', context)
@@ -117,7 +117,7 @@ def add_comment(request, post_id):
     """Добавление комментария к публикации"""
     post = get_object_or_404(Post, id=post_id)
     form = CommentForm(request.POST or None)
-    if form.is_valid():
+    if form.is_valid() and request.method == 'POST':
         comment = form.save(commit=False)
         comment.author = request.user
         comment.post = post
@@ -134,7 +134,7 @@ def edit_comment(request, post_id, comment_id):
     form = CommentForm(request.POST or None, instance=comment)
     context = {'comment': comment,
                'form': form}
-    if form.is_valid():
+    if form.is_valid() and request.method == 'POST':
         form.save()
         return redirect('blog:post_detail', post_id)
     return render(request, 'blog/comment.html', context)
@@ -183,7 +183,7 @@ def edit_profile(request, username):
         raise Http404(f'Вы указали неверное имя пользователя - {username}')
     form = UserForm(request.POST or None, instance=profile)
     context = {'form': form}
-    if form.is_valid():
+    if form.is_valid() and request.method == 'POST':
         form.save()
-        return redirect('blog:profile', username)
+        return redirect('blog:profile', request.POST.get('username'))
     return render(request, 'blog/user.html', context)
