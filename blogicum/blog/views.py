@@ -18,7 +18,7 @@ def get_posts(**kwargs):
                ).filter(**kwargs).order_by('-pub_date')
 
 
-def get_posts_paginator(request, queryset, number_of_pages=10):
+def get_paginator(request, queryset, number_of_pages=10):
     """Отфильтрованное представление постов в виде пагинатора,
        по N-шт на странице"""
     paginator = Paginator(queryset, number_of_pages)
@@ -32,7 +32,7 @@ def index(request):
         is_published=True,
         category__is_published=True,
         pub_date__lte=datetime.now())
-    page_obj = get_posts_paginator(request, posts)
+    page_obj = get_paginator(request, posts)
     context = {'page_obj': page_obj}
     return render(request, 'blog/index.html', context)
 
@@ -48,7 +48,7 @@ def category_posts(request, category_slug):
         category__is_published=True,
         pub_date__lte=datetime.now(),
         category=category)
-    page_obj = get_posts_paginator(request, posts)
+    page_obj = get_paginator(request, posts)
     context = {'category': category,
                'page_obj': page_obj}
     return render(request, 'blog/post_list.html', context)
@@ -168,7 +168,7 @@ def profile(request, username):
             category__is_published=True,
             pub_date__lte=datetime.now(),
             author=profile)
-    page_obj = get_posts_paginator(request, posts)
+    page_obj = get_paginator(request, posts)
     context = {'profile': profile,
                'page_obj': page_obj}
     return render(request, 'blog/profile.html', context)
