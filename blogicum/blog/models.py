@@ -91,4 +91,9 @@ class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
+        verbose_name = 'комментарий'
+        verbose_name_plural = 'Комментарии'
         ordering = ['-created_at']
+
+    def __str__(self) -> str:
+        return super().__str__()
