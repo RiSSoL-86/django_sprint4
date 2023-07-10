@@ -96,4 +96,4 @@ class Comment(models.Model):
         ordering = ['-created_at']
 
     def __str__(self) -> str:
-        return super().__str__()
+        return self.text
