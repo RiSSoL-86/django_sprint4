@@ -75,12 +75,12 @@ def post_detail(request, post_id):
 def create_post(request):
     """Создание публикации"""
     form = PostForm(request.POST or None, files=request.FILES or None)
-    context = {'form': form}
     if form.is_valid() and request.method == 'POST':
         post = form.save(commit=False)
         post.author = request.user
         post.save()
         return redirect('blog:profile', request.user)
+    context = {'form': form}
     return render(request, 'blog/create.html', context)
 
 
@@ -91,10 +91,10 @@ def edit_post(request, post_id):
     if request.user != post.author:
         return redirect('blog:post_detail', post_id)
     form = PostForm(request.POST or None, instance=post)
-    context = {'form': form}
     if form.is_valid() and request.method == 'POST':
         form.save()
         return redirect('blog:post_detail', post_id)
+    context = {'form': form}
     return render(request, 'blog/create.html', context)
 
 
@@ -105,10 +105,10 @@ def delete_post(request, post_id):
     if request.user != post.author:
         return redirect('blog:post_detail', post_id)
     form = PostForm(request.POST or None, instance=post)
-    context = {'form': form}
     if request.method == 'POST':
         post.delete()
         return redirect('blog:index')
+    context = {'form': form}
     return render(request, 'blog/create.html', context)
 
 
@@ -132,11 +132,11 @@ def edit_comment(request, post_id, comment_id):
     if request.user != comment.author:
         return redirect('blog:post_detail', post_id)
     form = CommentForm(request.POST or None, instance=comment)
-    context = {'comment': comment,
-               'form': form}
     if form.is_valid() and request.method == 'POST':
         form.save()
         return redirect('blog:post_detail', post_id)
+    context = {'comment': comment,
+               'form': form}
     return render(request, 'blog/comment.html', context)
 
 
@@ -146,10 +146,10 @@ def delete_comment(request, post_id, comment_id):
     comment = get_object_or_404(Comment, id=comment_id)
     if request.user != comment.author:
         return redirect('blog:post_detail', post_id)
-    context = {'comment': comment}
     if request.method == 'POST':
         comment.delete()
         return redirect('blog:post_detail', post_id)
+    context = {'comment': comment}
     return render(request, 'blog/comment.html', context)
 
 
@@ -182,8 +182,8 @@ def edit_profile(request, username):
     if request.user != profile:
         raise Http404(f'Вы указали неверное имя пользователя - {username}')
     form = UserForm(request.POST or None, instance=profile)
-    context = {'form': form}
     if form.is_valid() and request.method == 'POST':
         form.save()
         return redirect('blog:profile', request.POST.get('username'))
+    context = {'form': form}
     return render(request, 'blog/user.html', context)
