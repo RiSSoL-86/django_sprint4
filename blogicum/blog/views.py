@@ -9,7 +9,11 @@ from .forms import PostForm, CommentForm, UserForm
 from .models import Post, Category, User, Comment
 
 
+NUMBER_OF_PAGINATOR_PAGES = 10
+
+
 def get_posts(**kwargs):
+    """Отфильтрованное получение постов"""
     return Post.objects.select_related(
         'category',
         'location',
@@ -18,8 +22,9 @@ def get_posts(**kwargs):
                ).filter(**kwargs).order_by('-pub_date')
 
 
-def get_paginator(request, queryset, number_of_pages=10):
-    """Отфильтрованное представление постов в виде пагинатора,
+def get_paginator(request, queryset,
+                  number_of_pages=NUMBER_OF_PAGINATOR_PAGES):
+    """Представление queryset в виде пагинатора,
        по N-шт на странице"""
     paginator = Paginator(queryset, number_of_pages)
     page_number = request.GET.get('page')
@@ -66,8 +71,7 @@ def post_detail(request, post_id):
             pub_date__lte=datetime.now())
     form = CommentForm(request.POST or None)
     comments = Comment.objects.select_related(
-        'author'
-    ).filter(post=post_id).order_by('created_at')
+        'author').filter(post=post)
     context = {'post': post,
                'form': form,
                'comments': comments}
