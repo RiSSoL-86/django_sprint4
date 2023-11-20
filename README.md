@@ -10,7 +10,9 @@
 ## Описание проекта
 
 Доработка проекта django_sprint3.
-Финальная версия небольшой социальной сети для публикации личных дневников.   
+Финальная версия небольшой социальной сети для публикации личных дневников. 
+![image](https://github.com/RiSSoL-86/django_sprint4/assets/110422516/b744dfec-ac8a-4f60-9428-a8ce106f41b5)
+
 
 ## Как запустить проект:
 
@@ -21,17 +23,17 @@
 
 * Cоздать и активировать виртуальное окружение:
 
-        python3 -m venv env
+        python -m venv venv
         source venv/Scripts/activate
 
 * Установить зависимости из файла requirements.txt:
 
-        python3 -m pip install --upgrade pip
+        python -m pip install --upgrade pip
         pip install -r requirements.txt
 
 * Выполнить миграции:
 
-        python3 manage.py migrate
+        python manage.py migrate
 
 
 * Запустить проект:
